@@ -27,6 +27,9 @@ class AwsS3 {
     /// The file to upload
     required File file,
 
+    /// The session token used for temporary credentials
+    String? sessionToken,
+
     /// The key to save this file as. Will override destDir and filename if set.
     String? key,
 
@@ -97,6 +100,9 @@ class AwsS3 {
     req.fields['Policy'] = policy.encode();
     req.fields['X-Amz-Signature'] = signature;
     req.fields['Content-Type'] = contentType;
+    if (sessionToken != null) {
+      req.fields['X-Amz-Security-Token'] = sessionToken;
+    }
 
     // If metadata isn't null, add metadata params to the request.
     if (metadata != null) {
